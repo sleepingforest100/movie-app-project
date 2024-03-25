@@ -30,25 +30,30 @@ import com.salt.apps.moov.ui.components.MovieListItem
 import com.salt.apps.moov.ui.components.upcoming.AnimationScrollItem
 import com.salt.apps.moov.ui.components.upcoming.CarouselMovieItem
 
+// Домашний экран приложения, отображающий списки предстоящих и популярных фильмов.
 @Composable
 fun HomeScreen(
-    navController: NavController,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    navController: NavController, // Контроллер навигации для перехода к деталям фильма.
+    homeViewModel: HomeViewModel = hiltViewModel() // Модель представления для загрузки данных о фильмах.
 ) {
+    // Подписка на состояние предстоящих и популярных фильмов.
     val upcomingMoviesState by homeViewModel.upcomingMoviesState.collectAsState()
     val popularMoviesState by homeViewModel.popularMoviesState.collectAsState()
 
+    // Вертикальный список для отображения разделов с фильмами.
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background) // Фон экрана.
     ) {
         item {
+            // Заголовок раздела предстоящих фильмов.
             Text(
                 text = "Upcoming Movies",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(start = 18.dp, bottom = 15.dp)
             )
+            // Обработка состояния и отображение списка предстоящих фильмов.
             HandleSectionMoviesState(
                 upcomingMoviesState = upcomingMoviesState,
                 navController = navController
@@ -56,6 +61,7 @@ fun HomeScreen(
         }
 
         item {
+            // Заголовок раздела популярных фильмов.
             Text(
                 text = "Popular Movies",
                 style = MaterialTheme.typography.bodyMedium,
@@ -63,12 +69,21 @@ fun HomeScreen(
             )
         }
 
+        // Обработка состояния и отображение списка популярных фильмов.
         handlePopularMoviesState(
             popularMoviesState = popularMoviesState,
             navController = navController
         )
     }
 }
+
+
+//HandleSectionMoviesState и handlePopularMoviesState
+// функции отвечают за отображение фильмов в зависимости от их
+// состояния: загрузка, успех или ошибка. В случае успеха,
+// для предстоящих фильмов используется горизонтальный карусельный
+// список (HorizontalPager), а для популярных фильмов —
+// вертикальный список (LazyColumn).
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

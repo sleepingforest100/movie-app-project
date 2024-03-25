@@ -12,25 +12,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.salt.apps.moov.data.model.Movie
 
+// Компонент для отображения строки с деталями фильма.
 @Composable
 fun DetailMovieRow(data: Movie) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        modifier = Modifier.fillMaxWidth(), // Заполнение максимальной ширины.
+        horizontalArrangement = Arrangement.SpaceEvenly // Равномерное распределение колонок по горизонтали.
     ) {
+        // Колонка для даты выпуска.
         DetailColumn("Release date", data.releaseDate ?: "N/A")
+        // Колонка для языка.
         DetailColumn("Language", data.originalLanguage)
+        // Колонка для количества голосов.
         DetailColumn("Votes", data.voteCount.toString())
     }
 }
 
+// Компонент для отображения отдельной колонки с информацией.
 @Composable
 fun DetailColumn(title: String, value: String) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        horizontalAlignment = Alignment.CenterHorizontally, // Выравнивание по центру по горизонтали.
+        verticalArrangement = Arrangement.spacedBy(4.dp) // Расстояние между элементами в колонке.
     ) {
+        // Заголовок колонки.
         Text(title, style = MaterialTheme.typography.bodyMedium)
+        // Значение, связанное с заголовком.
         Text(value, style = MaterialTheme.typography.bodyMedium)
     }
 }
+

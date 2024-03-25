@@ -21,25 +21,30 @@ import coil.compose.SubcomposeAsyncImageContent
 import coil.request.ImageRequest
 import com.salt.apps.moov.utilities.Constants
 
+// Компонент для асинхронной загрузки изображения из сети с отображением индикатора загрузки.
 @Composable
 fun ImageNetworkLoader(
-    imageUrl: String,
-    voteAverage: Float,
-    modifier: Modifier = Modifier,
-    showVoteAverage: Boolean = true,
+    imageUrl: String, // URL изображения для загрузки.
+    voteAverage: Float, // Средний рейтинг для отображения, если требуется.
+    modifier: Modifier = Modifier, // Модификатор для настройки внешнего вида изображения.
+    showVoteAverage: Boolean = true, // Флаг, указывающий, нужно ли показывать средний рейтинг.
 ) {
     Box {
+        // Компонент для асинхронной загрузки изображения с поддержкой состояний загрузки.
         SubcomposeAsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(Constants.getImageUrl(imageUrl))
-                .crossfade(true)
-                .crossfade(400)
+            model = ImageRequest.Builder(LocalContext.current) // Создание запроса на загрузку изображения.
+                .data(Constants.getImageUrl(imageUrl)) // Установка URL изображения.
+                .crossfade(true) // Анимация плавного появления изображения.
+                .crossfade(400) // Продолжительность анимации плавного появления.
                 .build(),
-            contentDescription = null,
-            modifier = modifier
+            contentDescription = null, // Описание содержимого изображения для доступности.
+            modifier = modifier // Применение модификатора к изображению.
         ) {
+            // Обработка состояний загрузки изображения.
             when (painter.state) {
+                // Состояние загрузки.
                 is AsyncImagePainter.State.Loading -> {
+                    // Отображение индикатора загрузки по центру.
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -47,39 +52,43 @@ fun ImageNetworkLoader(
                     ) {
                         CircularProgressIndicator(
                             strokeWidth = 3.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(20.dp)
+                            color = MaterialTheme.colorScheme.primary, // Цвет индикатора.
+                            modifier = Modifier.size(20.dp) // Размер индикатора.
                         )
                     }
                 }
 
+                // Состояние ошибки загрузки.
                 is AsyncImagePainter.State.Error -> {
-
+                    // Отображение текста ошибки, если изображение не найдено.
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .wrapContentSize(Alignment.Center)
                     ) {
                         Text(
-                            "IMAGE URL NOT FOUND",
-                            fontWeight = FontWeight.Black
+                            "IMAGE URL NOT FOUND", // Текст ошибки.
+                            fontWeight = FontWeight.Black // Жирное начертание текста.
                         )
                     }
                 }
 
+                // Состояние успешной загрузки.
                 else -> {
+                    // Отображение содержимого изображения.
                     SubcomposeAsyncImageContent(
-                        contentScale = ContentScale.Crop,
+                        contentScale = ContentScale.Crop, // Масштабирование содержимого.
                     )
                 }
             }
         }
 
+        // Опциональное отображение среднего рейтинга в виде кругового индикатора.
         if (showVoteAverage) {
+            // Размещение кругового индикатора с рейтингом внутри контейнера.
             Box(modifier = Modifier.padding(10.dp)) {
                 CircularVote(percentage = voteAverage)
             }
         }
     }
-
 }

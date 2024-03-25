@@ -26,22 +26,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.salt.apps.moov.data.model.Movie
-import com.salt.apps.moov.ui.navigation.MoovScreen.DETAIL
+import com.salt.apps.moov.ui.navigation.MovieScreen.DETAIL
 
+// Компонент элемента списка фильмов с навигацией.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieListItem(
-    movie: Movie,
-    navController: NavController
+    movie: Movie, // Данные о фильме.
+    navController: NavController // Контроллер для навигации.
 ) {
     Column {
+        // Карточка с информацией о фильме.
         Card(
+            // Настройка цветов карточки.
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.background,
             ),
+            // Обработчик клика по карточке.
             onClick = {
+                // Переход на экран с детальной информацией о фильме.
                 navController.navigate("${DETAIL.route}/${movie.id}")
             },
+            // Модификаторы для настройки размера и отступов карточки.
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp)
@@ -52,15 +58,18 @@ fun MovieListItem(
                 )
                 .padding(horizontal = 18.dp)
         ) {
+            // Горизонтальное размещение элементов внутри карточки.
             Row(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
+                // Контейнер для изображения.
                 Box(
                     modifier = Modifier
                         .width(130.dp)
                         .height(150.dp)
                 ) {
+                    // Загрузчик изображения постера фильма.
                     ImageNetworkLoader(
                         imageUrl = movie.posterPath ?: "",
                         voteAverage = movie.voteAverage?.toFloat() ?: 0f,
@@ -69,11 +78,13 @@ fun MovieListItem(
                             .height(150.dp)
                     )
                 }
+                // Вертикальное размещение текстовой информации о фильме.
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
                         .padding(10.dp)
                 ) {
+                    // Название фильма.
                     Text(
                         text = movie.title,
                         style = TextStyle(
@@ -83,6 +94,7 @@ fun MovieListItem(
                         )
                     )
                     Spacer(modifier = Modifier.height(5.dp))
+                    // Краткое описание фильма.
                     Text(
                         text = movie.overview.takeIf { it?.isNotBlank() == true }
                             ?: "N/A",
@@ -95,10 +107,9 @@ fun MovieListItem(
                         )
                     )
                     Spacer(modifier = Modifier.height(15.dp))
+                    // Дата выхода фильма.
                     Text(
                         text = "Release date: ${movie.releaseDate}",
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis,
                         style = TextStyle(
                             fontSize = 14.sp,
                             color = Color.Black,
@@ -108,6 +119,7 @@ fun MovieListItem(
                 }
             }
         }
+        // Отступ между элементами списка.
         Spacer(modifier = Modifier.height(12.dp))
     }
 }

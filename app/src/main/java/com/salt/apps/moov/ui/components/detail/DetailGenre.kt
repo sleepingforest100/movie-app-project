@@ -15,30 +15,31 @@ import androidx.compose.ui.unit.dp
 import com.salt.apps.moov.data.model.Movie
 import com.salt.apps.moov.utilities.DataMapper
 
+// Компонент Composable для отображения жанров фильма.
 @Composable
 fun DetailGenre(data: Movie, modifier: Modifier = Modifier) {
-    val genres = DataMapper.mapGenreIdToGenre(data.genreIds)
+    val genres = DataMapper.mapGenreIdToGenre(data.genreIds) // Преобразует ID жанров в их названия.
     Box(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth() // Заполняет максимальную ширину родительского элемента.
     ) {
-        LazyRow(
+        LazyRow( // Создает горизонтальный скроллируемый список.
             modifier = modifier
-                .align(Alignment.Center)
+                .align(Alignment.Center) // Центрирует список внутри Box.
         ) {
-            items(genres.take(3).size) { index ->
-                Card(
-                    modifier = Modifier.padding(end = 10.dp),
+            items(genres.take(3).size) { index -> // Отображает первые три жанра из списка.
+                Card( // Карточка для отображения жанра.
+                    modifier = Modifier.padding(end = 10.dp), // Добавляет отступ справа.
                 ) {
-                    Text(
-                        text = genres[index] ?: "N/A",
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        style = MaterialTheme.typography.bodyMedium,
+                    Text( // Текстовый компонент для отображения названия жанра.
+                        text = genres[index] ?: "N/A", // Отображает название жанра или "N/A", если жанр неизвестен.
+                        color = MaterialTheme.colorScheme.onPrimary, // Цвет текста.
+                        style = MaterialTheme.typography.bodyMedium, // Стиль текста.
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.primary)
+                            .background(MaterialTheme.colorScheme.primary) // Фоновый цвет карточки.
                             .padding(
                                 horizontal = 15.dp,
-                                vertical = 5.dp
+                                vertical = 5.dp // Внутренние отступы карточки.
                             ),
                     )
                 }

@@ -18,25 +18,32 @@ import com.salt.apps.moov.data.Resource
 import com.salt.apps.moov.ui.components.CircularLoading
 import com.salt.apps.moov.ui.components.MovieListItem
 
+// Экран избранных фильмов.
 @Composable
 fun FavoriteScreen(
-    navController: NavController,
-    favoriteViewModel: FavoriteViewModel = hiltViewModel()
+    navController: NavController, // Контроллер навигации для перехода между экранами.
+    favoriteViewModel: FavoriteViewModel = hiltViewModel() // Внедрение экземпляра FavoriteViewModel.
 ) {
+    // Подписка на состояние списка избранных фильмов.
     val favoriteMoviesState by favoriteViewModel.favoriteMovies.collectAsState()
 
+    // Запуск эффекта для инициализации загрузки списка избранных фильмов.
     LaunchedEffect(Unit) {
         favoriteViewModel.getFavoriteMovies()
     }
 
+    // Отображение состояния загрузки, успешной загрузки или ошибки.
     when (favoriteMoviesState) {
+        // Отображение индикатора загрузки.
         is Resource.Loading -> {
             CircularLoading()
         }
 
+        // Отображение списка избранных фильмов.
         is Resource.Success -> {
             val data = (favoriteMoviesState as Resource.Success).data
             if (data.isEmpty()) {
+                // Сообщение о пустом списке избранных фильмов.
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -44,23 +51,27 @@ fun FavoriteScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        "No favorite movies available",
+                        "No favorite movies available", // Сообщение пользователю.
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
             } else {
+                // Отображение списка избранных фильмов.
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background)
                 ) {
                     items(data.size) { index ->
-                        MovieListItem(movie = data[index], navController = navController)
+                        MovieListItem(movie = data[index], navController = navController) // Элемент списка фильма.
                     }
                 }
             }
         }
 
-        is Resource.Error -> {}
+        // Обработка ошибки загрузки.
+        is Resource.Error -> {
+            // Здесь может быть отображено сообщение об ошибке.
+        }
     }
 }

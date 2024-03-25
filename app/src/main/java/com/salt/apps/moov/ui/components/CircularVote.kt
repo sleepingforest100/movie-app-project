@@ -21,52 +21,56 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+// Компонент для отображения кругового индикатора с процентом голосов.
 @Composable
 fun CircularVote(
-    percentage: Float,
-    radius: Dp = 15.dp,
-    color: Color = MaterialTheme.colorScheme.surfaceVariant,
-    strokeWidth: Dp = 2.dp,
-    animDuration: Int = 1000,
-    animDelay: Int = 0
+    percentage: Float, // Процент заполнения.
+    radius: Dp = 15.dp, // Радиус индикатора.
+    color: Color = MaterialTheme.colorScheme.surfaceVariant, // Цвет заполнения.
+    strokeWidth: Dp = 2.dp, // Толщина линии индикатора.
+    animDuration: Int = 1000, // Продолжительность анимации в миллисекундах.
+    animDelay: Int = 0 // Задержка начала анимации в миллисекундах.
 ) {
     var animationPlayed by remember {
-        mutableStateOf(false)
+        mutableStateOf(false) // Флаг, указывающий, была ли проиграна анимация.
     }
     val currentPercentage = animateFloatAsState(
-        targetValue = if (animationPlayed) percentage else 0f,
+        targetValue = if (animationPlayed) percentage else 0f, // Целевое значение анимации.
         animationSpec = tween(
-            durationMillis = animDuration,
-            delayMillis = animDelay
+            durationMillis = animDuration, // Продолжительность анимации.
+            delayMillis = animDelay // Задержка анимации.
         ), label = ""
     )
 
+    // Запуск анимации при первом рендеринге компонента.
     LaunchedEffect(key1 = true) {
         animationPlayed = true
     }
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.size(radius * 2f)
+        modifier = Modifier.size(radius * 2f) // Установка размера контейнера для индикатора.
     ) {
-        val circleBgColor = MaterialTheme.colorScheme.scrim
+        val circleBgColor = MaterialTheme.colorScheme.scrim // Цвет фона круга.
+        // Отрисовка кругового индикатора и заполненной части.
         Canvas(modifier = Modifier.size(radius * 2f)) {
             drawCircle(
                 color = circleBgColor,
-                alpha = 0.6f
+                alpha = 0.6f // Прозрачность фона круга.
             )
             drawArc(
-                color = color,
-                startAngle = -90f,
-                sweepAngle = 360 * (currentPercentage.value / 10),
+                color = color, // Цвет заполнения.
+                startAngle = -90f, // Начальный угол.
+                sweepAngle = 360 * (currentPercentage.value / 10), // Угол заполнения.
                 useCenter = false,
-                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round) // Стиль линии.
             )
         }
+        // Текст с текущим процентом голосов.
         Text(
             text = "%.1f".format(currentPercentage.value),
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            style = MaterialTheme.typography.bodySmall
+            color = MaterialTheme.colorScheme.surfaceVariant, // Цвет текста.
+            style = MaterialTheme.typography.bodySmall // Стиль текста.
         )
     }
 }

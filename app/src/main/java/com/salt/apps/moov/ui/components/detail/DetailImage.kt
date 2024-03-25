@@ -23,33 +23,36 @@ import com.salt.apps.moov.data.model.Movie
 import com.salt.apps.moov.ui.components.ImageNetworkLoader
 import com.salt.apps.moov.ui.screens.detail.DetailViewModel
 
+// Компонент Composable для отображения детального изображения фильма и иконки избранного.
 @Composable
 fun DetailImage(data: Movie, detailViewModel: DetailViewModel) {
-    var isFavorite by remember { mutableStateOf(false) }
+    var isFavorite by remember { mutableStateOf(false) } // Состояние, отслеживающее, является ли фильм избранным.
     Box(
         modifier = Modifier
-            .height(340.dp)
+            .height(340.dp) // Установка высоты контейнера.
     ) {
         Box {
+            // Загрузчик сетевого изображения для фона фильма.
             ImageNetworkLoader(
-                imageUrl = data.backdropPath ?: "",
-                voteAverage = 0f,
-                showVoteAverage = false,
+                imageUrl = data.backdropPath ?: "", // URL изображения фона. Если отсутствует, используется пустая строка.
+                voteAverage = 0f, // Средний рейтинг не отображается.
+                showVoteAverage = false, // Отключение отображения рейтинга.
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
+                    .fillMaxWidth() // Заполнение максимальной ширины.
+                    .height(250.dp) // Установка высоты изображения.
             )
 
+            // Пространство с градиентом в нижней части изображения для визуального эффекта перехода.
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .height(100.dp)
+                    .align(Alignment.BottomCenter) // Выравнивание по нижнему центру.
+                    .height(100.dp) // Высота пространства.
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                Color.Transparent,
-                                Color.White
+                                Color.Transparent, // Начало градиента прозрачное.
+                                Color.White // Конец градиента белый.
                             ),
                         ),
                     )
@@ -57,31 +60,34 @@ fun DetailImage(data: Movie, detailViewModel: DetailViewModel) {
 
         }
         Box(
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.BottomCenter) // Выравнивание по нижнему центру.
         ) {
+            // Карточка для постера фильма.
             Card {
                 ImageNetworkLoader(
-                    imageUrl = data.posterPath ?: "",
-                    voteAverage = data.voteAverage?.toFloat() ?: 0f,
+                    imageUrl = data.posterPath ?: "", // URL постера фильма. Если отсутствует, используется пустая строка.
+                    voteAverage = data.voteAverage?.toFloat() ?: 0f, // Средний рейтинг фильма, преобразованный в Float.
                     modifier = Modifier
-                        .width(150.dp)
-                        .height(200.dp)
+                        .width(150.dp) // Ширина постера.
+                        .height(200.dp) // Высота постера.
                 )
             }
 
+            // Карточка для иконки избранного.
             Card(
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
+                    .align(Alignment.BottomEnd) // Выравнивание по нижнему правому углу.
             ) {
+                // Компонент переключателя избранного.
                 ToggleFavorite(
-                    isFavorite = data.isFavorite,
+                    isFavorite = data.isFavorite, // Текущее состояние избранного.
                     onToggle = {
-                        isFavorite = it
-                        detailViewModel.toggleFavorite(data.id, isFavorite)
+                        isFavorite = it // Обновление состояния избранного.
+                        detailViewModel.toggleFavorite(data.id, isFavorite) // Обновление состояния избранного во ViewModel.
                     }, modifier = Modifier
-                        .size(45.dp)
+                        .size(45.dp) // Размер иконки избранного.
                         .background(
-                            color = MaterialTheme.colorScheme.background,
+                            color = MaterialTheme.colorScheme.background, // Фоновый цвет иконки.
                         )
                 )
             }
