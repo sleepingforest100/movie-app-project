@@ -17,5 +17,5 @@ object Constants {
     }
 
     const val DB_NAME = "Moov.db"
-    const val DB_VERSION = 3
+    const val DB_VERSION = 4
 }
